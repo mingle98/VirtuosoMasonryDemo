@@ -1,4 +1,4 @@
-import { VirtuosoMasonry, type VirtuosoMasonryProps } from '@virtuoso.dev/masonry'
+import { VirtuosoMasonry } from '@virtuoso.dev/masonry'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { galleryItems, type GalleryItem } from './data/gallery'
 import './App.css'
@@ -70,6 +70,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const pageRef = useRef(0)
   const isRequestingRef = useRef(false)
+  const scrollerRef = useRef<HTMLElement | null>(null)
+  const lastLoadTimeRef = useRef(0)
 
   const fetchMore = useCallback(() => {
     if (isRequestingRef.current) return
@@ -86,27 +88,60 @@ function App() {
     }, 600)
   }, [])
 
+  // 初始加载
   useEffect(() => {
     fetchMore()
-  }, [fetchMore])
+  }, [])
 
+  // 找到滚动容器并监听滚动
   useEffect(() => {
-    const scroller = document.querySelector<HTMLElement>('[data-testid="virtuoso-scroller"]')
-    if (!scroller) return
+    const findAndListenScroller = () => {
+      const scroller = document.querySelector('[data-testid="virtuoso-scroller"]') as HTMLElement
+      
+      if (!scroller) {
+        console.log('⏳ 等待 virtuoso-scroller...')
+        requestAnimationFrame(findAndListenScroller)
+        return
+      }
 
-    const handleScroll = () => {
-      const { scrollTop, clientHeight, scrollHeight } = scroller
-      const distanceToBottom = scrollHeight - (scrollTop + clientHeight)
-      if (distanceToBottom < 200) {
-        fetchMore()
+      console.log('✅ 找到 virtuoso-scroller，开始监听滚动')
+      scrollerRef.current = scroller
+
+      const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = scroller
+        const distanceToBottom = scrollHeight - scrollTop - clientHeight
+
+        // 当距底部小于 300px 时触发
+        if (distanceToBottom < 300 && !isRequestingRef.current) {
+          const now = Date.now()
+          
+          // 防抖：避免在 1 秒内多次触发
+          if (now - lastLoadTimeRef.current > 1000) {
+            console.log('🔄 滚动到底部，触发加载，距离:', distanceToBottom)
+            lastLoadTimeRef.current = now
+            fetchMore()
+          }
+        }
+      }
+
+      scroller.addEventListener('scroll', handleScroll, { passive: true })
+      
+      console.log('✅ 滚动监听已设置')
+
+      return () => {
+        scroller.removeEventListener('scroll', handleScroll)
+        console.log('🧹 滚动监听已移除')
       }
     }
 
-    scroller.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
+    // 延迟以确保 VirtuosoMasonry 渲染完成
+    const timer = setTimeout(findAndListenScroller, 500)
 
-    return () => scroller.removeEventListener('scroll', handleScroll)
-  }, [fetchMore, items.length])
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [fetchMore])
+
 
   return (
     <div className="app-shell">
