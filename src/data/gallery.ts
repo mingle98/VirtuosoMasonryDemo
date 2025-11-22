@@ -4,7 +4,8 @@ export type GalleryItem = {
   author: string
   src: string
   tag: string
-  height: number
+  height?: number
+  width?: number
 }
 
 export const galleryItems: GalleryItem[] = [

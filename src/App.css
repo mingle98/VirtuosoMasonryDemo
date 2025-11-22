@@ -1,3 +1,7 @@
+* {
+  padding: 0;
+  margin: 0;
+}
 .app-shell {
   min-height: 100vh;
   padding: 40px clamp(16px, 4vw, 56px) 80px;
@@ -180,12 +184,18 @@
 }
 
 .masonry-card {
-  border-radius: 24px;
+  border-radius: 18px;
   overflow: hidden;
   background: rgba(22, 24, 31, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
+  position: relative;
   flex-direction: column;
+  &:hover {
+    .masonry-card__body {
+      display: block;
+    }
+  }
 }
 
 .masonry-card__media {
@@ -195,7 +205,7 @@
 
 .masonry-card__media img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   display: block;
 }
@@ -207,19 +217,23 @@
 }
 
 .masonry-card__body {
-  padding: 16px;
+  position: absolute;
+  height: 40px;
+  border-radius: 20px;
+  bottom: 6px;
+  left: 6px;
+  display: none;
+  width: calc(100% - 12px);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .masonry-card__body h3 {
-  margin: 12px 0 6px;
   font-size: 18px;
+  color: #333;
+  line-height: 40px;
+  padding-left: 10px;
 }
 
-.masonry-card__body p {
-  margin: 0;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.65);
-}
 
 .masonry-loading {
   text-align: center;

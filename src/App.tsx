@@ -30,16 +30,17 @@ const useResponsiveColumns = () => {
 
 const MasonryCard = ({ item }: { item: GalleryItem }) => (
   <article className="masonry-card">
-    <div className="masonry-card__media" style={{ height: item.height }}>
-      <img src={item.src} alt={item.title} loading="lazy" />
-      <button className="icon-button" type="button" aria-label="收藏">
-        ❤
-      </button>
+    <div className="masonry-card__media">
+      <img
+        src={item.src}
+        alt={item.title}
+        loading="lazy"
+        // 如果有真实宽高，使用真实值；否则用 3:4 的默认比例预估一个
+        width={item.width || 300}
+        height={item.height || Math.round((300 * 4) / 3)}/>
     </div>
     <div className="masonry-card__body">
-      <span className="pill pill--small">{item.tag}</span>
       <h3>{item.title}</h3>
-      <p>by {item.author}</p>
     </div>
   </article>
 )
