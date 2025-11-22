@@ -161,14 +161,17 @@ export default function App() {
               key={it.id}
               className={`grid-item`}
             >
-              <div className="card">
+              <div className="card" style={{
+                width: '100%',
+                aspectRatio: it.height && it.width ? `${it.width} / ${it.height}` : 'unknown',
+              }}>
                 <img
                   src={it.src}
                   alt={it.title}
                   loading="lazy"
                   // 如果有真实宽高，使用真实值；否则用 3:4 的默认比例预估一个
-                  width={it.width || 300}
-                  height={it.height || Math.round((300 * 4) / 3)}
+                  // width={it.width || 300}
+                  // height={it.height || Math.round((300 * 4) / 3)}
                 />
                 <div className="card-body">
                   <div className="card-title">{it.title}</div>
