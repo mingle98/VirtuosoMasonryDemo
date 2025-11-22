@@ -32,6 +32,8 @@ function makeItems(n) {
       id: i,
       src: `https://picsum.photos/seed/${seed}/${width}/${h}`,
       title: `Item ${i + 1}`,
+      width,
+      height: h,
     };
   });
 }
@@ -127,7 +129,7 @@ export default function App() {
           next={addItems}
           hasMore={hasMore}
           height={600}
-          loader={<div style={{ textAlign: "center", padding: 16 }}>Loading more...</div>}
+          loader={<div style={{ textAlign: "center", padding: 16 }}>加载中...</div>}
           endMessage={
             <div style={{ textAlign: "center", padding: 16, color: "#9aa6b8" }}>
               已经到底啦
@@ -142,11 +144,12 @@ export default function App() {
           {/* Example: a featured block that spans two columns */}
           <div className="grid-item grid-item--w2 featured">
             <div className="featured-inner">
-              <h3>Featured (spans 2 columns)</h3>
               <img
                 src={`https://picsum.photos/seed/featured/900/380`}
                 alt="featured"
                 loading="lazy"
+                width={900}
+                height={380}
               />
             </div>
           </div>
@@ -159,7 +162,14 @@ export default function App() {
               className={`grid-item`}
             >
               <div className="card">
-                <img src={it.src} alt={it.title} loading="lazy" />
+                <img
+                  src={it.src}
+                  alt={it.title}
+                  loading="lazy"
+                  // 如果有真实宽高，使用真实值；否则用 3:4 的默认比例预估一个
+                  width={it.width || 300}
+                  height={it.height || Math.round((300 * 4) / 3)}
+                />
                 <div className="card-body">
                   <div className="card-title">{it.title}</div>
                 </div>
