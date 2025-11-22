@@ -54,7 +54,7 @@ export default function App() {
     const msnry = new Masonry(gridRef.current, {
       itemSelector: ".grid-item",
       columnWidth: ".grid-sizer",
-      gutter: 16,
+      gutter: 6,
       percentPosition: true,
       horizontalOrder: false,
       transitionDuration: 0,
