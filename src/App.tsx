@@ -30,14 +30,15 @@ const useResponsiveColumns = () => {
 
 const MasonryCard = ({ item }: { item: GalleryItem }) => (
   <article className="masonry-card">
-    <div className="masonry-card__media">
+    <div className="masonry-card__media" style={{
+      width: '100%',
+      aspectRatio: item.width && item.height ? `${item.width} / ${item.height}` : 'unknown',
+    }}>
       <img
         src={item.src}
         alt={item.title}
         loading="lazy"
-        // 如果有真实宽高，使用真实值；否则用 3:4 的默认比例预估一个
-        width={item.width || 300}
-        height={item.height || Math.round((300 * 4) / 3)}/>
+      />
     </div>
     <div className="masonry-card__body">
       <h3>{item.title}</h3>

@@ -200,6 +200,7 @@
 
 .masonry-card__media {
   position: relative;
+  min-height: 100px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
