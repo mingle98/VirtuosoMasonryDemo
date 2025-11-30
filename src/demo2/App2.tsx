@@ -1,7 +1,7 @@
 import { VirtuosoMasonry } from '@virtuoso.dev/masonry'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { galleryItems, type GalleryItem } from './data/gallery'
-import './App.css'
+import { galleryItems, type GalleryItem } from '../data/gallery'
+import './App2.css'
 
 type MasonryItem = GalleryItem & { virtualId: string }
 
